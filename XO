@@ -1,0 +1,64 @@
+#игра
+game = [1,2,3,4,5,6,7,8,9]
+
+# количество клеток
+quantity_game = 3
+
+def draw_game():
+    '''Выводим игроевое поле'''
+    print('_' * 4 * quantity_game)
+    for i in range(quantity_game):
+        print((' ' * 3 + '|')*3)
+        print('', game[i * quantity_game], '|', game[1 + i*quantity_game],'|', game[2 + i*quantity_game], '|' )
+        print(('_' * 3 + '|')*3)
+
+def game_step(index, char):
+    '''Выполняем ход'''
+    if(index > 9 or index < 1 or game [index - 1] in ('X', 'O')):
+        return False
+    game [index - 1] = char   
+    return True
+def chek_win(game):
+    '''Проверяем победу одного из игроков'''
+    win = False
+    win_combination = (
+        (0,1,2), (3,4,5), (6,7,8), # горизонтальные линии
+        (0,3,6), (1,4,7), (2,5,8), #вертикальные линии
+        (0,4,8), (2,4,6) # диагональные линии
+        )
+    for pos in win_combination:
+            if (game[pos[0]] == game[pos[1]] and game[pos[1]] == game[pos[2]] and game[pos[1]] in ('X','O')):
+                    win == game[pos[0]]
+    return win
+    pass
+def start_game():
+    #игрок
+    one_player = 'X'
+    # номер шага
+    step = 1
+    draw_game()
+    
+    while (step<10) and (chek_win(game) == False):
+        index = input('Ходит игрок' + one_player + '. введите номер поля (0 - выход):')
+        if (int(index) == '0'):
+            break
+        # если получилось сделать ход 
+        if(game_step(int(index), one_player)):
+            print('Вы сделали ход')
+            if (one_player == 'X'):
+                one_player = 'O'
+            else:
+                one_player = 'X'    
+            draw_game()
+            
+            step += 1
+        else:
+            print('Неверный номер! Повторите!')
+
+    if(step == 9):
+        print('Игра окончена. Ничья!')
+    else: 
+        print('Выиграл' + chek_win())
+        
+print('Добро пожаловать в крестики-нолики!')
+start_game()
